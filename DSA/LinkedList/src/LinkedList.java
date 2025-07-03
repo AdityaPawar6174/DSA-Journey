@@ -21,11 +21,18 @@ public class LinkedList {
     }
 
     public void printList(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
         Node temp = head;
         while (temp != null){
-            System.out.println(temp.value);
+            sb.append(temp.value);
+            if (temp.next != null){
+                sb.append(" , ");
+            }
             temp = temp.next;
         }
+        sb.append("}");
+        System.out.println(sb.toString());
     }
 
     public void getHead(){
@@ -113,4 +120,88 @@ public class LinkedList {
 
         return temp;
     }
+
+    // Getting the Node at a specific index
+    public Node getNode(int index){
+        if (index < 0 || index >= length){
+            return null;
+        }
+        Node temp = head;
+        for (int i=0; i < index; i++){
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    // Setting the Node value at a specific index
+    public boolean setNode(int index, int value){
+        Node temp = getNode(index);
+
+        if (temp != null){
+            temp.value = value;
+            return true;
+        }
+        return false;
+    }
+
+    // Inserting a new Node at a specific index
+    public boolean insert(int index, int value){
+        if(index < 0 || index > length){
+            return false;
+        }
+
+        if(index == 0){
+            prepend(value);
+            return true;
+        }
+
+        if(index == length){
+            append(value);
+            return true;
+        }
+
+        Node newNode = new Node(value);
+        Node temp = getNode(index - 1);
+        newNode.next = temp.next;
+        temp.next = newNode;
+
+        length++;
+        return true;
+    }
+
+    // Removing a Node at a specific index
+    public Node remove(int index){
+        if(index < 0 || index > length) return null;
+
+        if(index == 0) removeFirst();
+
+        if(index == length - 1) removeLast();
+
+        Node pre = getNode(index - 1);
+        Node temp = getNode(index);
+
+        pre.next = temp.next;
+        temp.next = null;
+
+        length--;
+        return temp;
+    }
+
+    // Reversing the Linked List
+    public void reverse(){
+        Node temp = head;
+        head = tail;
+        tail = head;
+
+        Node after = temp.next;
+        Node before = null;
+
+        for(int i = 0; i < length; i++){
+            after = temp.next;
+            temp.next = before;
+            before = temp;
+            temp = after;
+        }
+    }
+
 }
